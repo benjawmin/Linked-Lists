@@ -1,6 +1,5 @@
 #include "hw06.h"
 
-
 typedef struct BookList BookList;
 typedef struct BookEntry BookEntry;
 typedef struct BookData BookData;
