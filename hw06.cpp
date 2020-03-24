@@ -1,97 +1,96 @@
 #include "hw06.h"
 
-typedef struct BookList BookList;
-typedef struct BookEntry BookEntry;
-typedef struct BookData BookData;
-
-struct BookList
-{
-    int r;
-    BookEntry* head;
-    BookEntry* tail;
-};
-
-struct BookEntry
-{
-    BookList* list;
-    BookEntry* next;
-    BookEntry* pre;
-    BookData* data;
-};
-
-struct BookData
-{
-    string isdn;
-    string author;
-    string title;
-};
-
 int main()
 {
-    ifstream fin("booksdb.txt");
-    string one, two, three, space;
-
-    BookList *list = nullptr;
-    BookEntry *loop = nullptr;
-    BookEntry *rec = nullptr;
-
-    list = new BookList;
-    list->r = 0;
-    list->head = nullptr;
-    list->tail = nullptr;
-
-    int i = 0;
-    cout << i << endl;
-
-    while(getline(fin, one) && getline(fin, two) && getline(fin, three) && getline(fin, space))
+    int choice;
+    int number;
+    while(true)
     {
-	++i;
-	cout<<i<<endl;
+        cout << "What would you like to do" << endl;
+        cout << "1. Add a book" << endl;
+        cout << "2. Delete a book" << endl;
+        cout << "3. Show a book" << endl;
+        cout << "4. Show all books" << endl;
+        cout << "5. Save and exit" << endl;
 
-	loop = new BookEntry;
-	loop ->next= nullptr;
-        loop ->pre = nullptr;
-	loop ->data = new BookData;
-	//on first iteration the tail needs to point to null
-	if(list->head == nullptr)
-	{
-	    list ->head =loop;
-	    loop ->pre = nullptr;
-	}
-        else
-	{
-	    loop ->pre = rec;
-	    rec ->next = loop;
-	}
-	list ->tail = loop;
-	rec = loop;
-	rec -> data -> isdn = one;
-	rec -> data -> author = two;
-	rec -> data -> title = three;
-	++list ->r;
-    }
-    loop = list ->head;
+        cin >> choice;
+        //ofstream fout("booksdb.txt");
+        ifstream fin("booksdb.txt");
+        string one, two, three, space;
 
-    while(loop != nullptr)
-    {
-	cout << endl << "Isdn: "<< loop ->data ->isdn;
-	cout << endl << "Author: " << loop -> data ->author;
-	cout << endl << "Title: " << loop ->data ->title << endl;
-	loop = loop->next;
-    }
+        BookList *lst = nullptr;
+        BookEntry *loop = nullptr;
+        BookEntry *rec = nullptr;
 
-    loop = list -> head;
-    BookEntry *todel = loop;
-    while(loop)
-    {
-	loop = loop ->next;
-	delete todel ->data;
-	delete todel;
-	todel = loop;
+        lst = new BookList;
+        lst->r = 0;
+        lst->head = nullptr;
+        lst->tail = nullptr;
+
+        while(getline(fin, one) && getline(fin, two) && getline(fin, three) && getline(fin, space))
+        {
+            loop = new BookEntry;
+            loop ->next= nullptr;
+            loop ->pre = nullptr;
+            loop ->data = new BookData;
+            //on first iteration the tail needs to point to null
+            if(lst->head == nullptr)
+            {
+                lst ->head =loop;
+                loop ->pre = nullptr;
+            }
+            else
+            {
+                loop ->pre = rec;
+                rec ->next = loop;
+            }
+            lst ->tail = loop;
+            rec = loop;
+            rec -> data -> isbn = one;
+            rec -> data -> author = two;
+            rec -> data -> title = three;
+            ++lst ->r;
+            number = lst->r;
+        }
+        loop = lst ->head;
+        
+        if(choice == 1)
+        {
+            addBook(BookEntry* loop, BookList* lst);
+        }
+    /*
+        if(choice == 2)
+        {
+            cout <<"There are " << number <<" books, which book would you like to delete." << endl;
+            delBook(loop, lst, number);
+        }
+        */
+        if(choice == 3)
+        {
+            cout << "There are " << number << " books, which book would you like to see." << endl;
+            showBook(loop, number);
+        }
+
+        if(choice == 4)
+        {
+            showBooks(loop);
+        }
+        
+        if(choice == 5)
+        {
+            break;
+        }
+        BookEntry *todel = loop;
+        while(loop)
+        {
+            loop = loop ->next;
+            delete todel ->data;
+            delete todel;
+            todel = loop;
+        }
+        delete lst;
     }
-    delete list;
 
     return 0;
 }
-
 
