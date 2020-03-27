@@ -30,7 +30,10 @@ struct BookData
     string author;
     string title;
 };
-//void delBook(BookEntry* loop, BookList* lst, int number);
+
+BookEntry* delBook(BookEntry* loop, BookList* lst, int number);
 void showBooks(BookEntry* loop);
 void showBook(BookEntry* loop, int number);
-void addBook(BookEntry* loop, BookList* lst);
+int menu();
+BookEntry* addBook(BookEntry* loop, BookList* lst, BookEntry* rec);
+void popList(BookEntry* loop);
